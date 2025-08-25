@@ -46,8 +46,8 @@ const PropertyList = () => {
                     Add Property
                 </Link>
             </div>
-            <div className="overflow-x-auto">
-                <table className="table w-100">
+            <div className="table-responsive">
+                <table className="table">
                     <thead className="table-light text-muted text-uppercase small">
                         <tr>
                             <th className="p-3 text-start">Project Name</th>

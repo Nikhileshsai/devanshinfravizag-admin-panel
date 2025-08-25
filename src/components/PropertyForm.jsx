@@ -34,7 +34,7 @@ const PropertyForm = () => {
         const imageUrls = [];
         for (const image of images) {
             const fileName = `${Date.now()}_${image.name}`;
-            const { data, error } = await supabase.storage
+            const { error } = await supabase.storage
                 .from('property-images')
                 .upload(fileName, image);
 
@@ -54,7 +54,7 @@ const PropertyForm = () => {
         const investmentFeaturesArray = investmentFeatures.split(',').map(item => item.trim());
         const connectivityInfoArray = connectivityInfo.split(',').map(item => item.trim());
 
-        const { data, error } = await supabase.from('properties').insert([{
+        const { error } = await supabase.from('properties').insert([{
             project_name: projectName,
             project_name_te: projectNameTe,
             location,
@@ -79,130 +79,115 @@ const PropertyForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="space-y-12">
-                <div className="border-b border-gray-900/10 pb-12">
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">Property Information</h2>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-8">
+                    <div className="card p-4 shadow-sm rounded">
+                        <h2 className="text-center mb-4">Add New Property</h2>
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-5">
+                                <div className="border-bottom pb-4 mb-4">
+                                    <h4 className="h4 fw-semibold text-dark">Property Information</h4>
+                                    <p className="small text-muted mt-1">This information will be displayed publicly so be careful what you share.</p>
 
-                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <div className="sm:col-span-3">
-                            <label htmlFor="project-name" className="block text-sm font-medium leading-6 text-gray-900">Project Name</label>
-                            <div className="mt-2">
-                                <input type="text" id="project-name" value={projectName} onChange={(e) => setProjectName(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                        </div>
+                                    <div className="row mt-4 g-3">
+                                        <div className="col-md-6">
+                                            <label htmlFor="project-name" className="form-label">Project Name</label>
+                                            <input type="text" id="project-name" value={projectName} onChange={(e) => setProjectName(e.target.value)} className="form-control" />
+                                        </div>
 
-                        <div className="sm:col-span-3">
-                            <label htmlFor="project-name-te" className="block text-sm font-medium leading-6 text-gray-900">Project Name (Telugu)</label>
-                            <div className="mt-2">
-                                <input type="text" id="project-name-te" value={projectNameTe} onChange={(e) => setProjectNameTe(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                        </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="project-name-te" className="form-label">Project Name (Telugu)</label>
+                                            <input type="text" id="project-name-te" value={projectNameTe} onChange={(e) => setProjectNameTe(e.target.value)} className="form-control" />
+                                        </div>
 
-                        <div className="col-span-full">
-                            <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">Location</label>
-                            <div className="mt-2">
-                                <input type="text" id="location" value={location} onChange={(e) => setLocation(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="location" className="form-label">Location</label>
+                                            <input type="text" id="location" value={location} onChange={(e) => setLocation(e.target.value)} className="form-control" />
+                                        </div>
 
-                        <div className="col-span-full">
-                            <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">Description</label>
-                            <div className="mt-2">
-                                <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
-                            </div>
-                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="description" className="form-label">Description</label>
+                                            <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="form-control"></textarea>
+                                        </div>
 
-                        <div className="col-span-full">
-                            <label htmlFor="description-te" className="block text-sm font-medium leading-6 text-gray-900">Description (Telugu)</label>
-                            <div className="mt-2">
-                                <textarea id="description-te" value={descriptionTe} onChange={(e) => setDescriptionTe(e.target.value)} rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
-                            </div>
-                        </div>
+                                        <div className="col-12">
+                                            <label htmlFor="description-te" className="form-label">Description (Telugu)</label>
+                                            <textarea id="description-te" value={descriptionTe} onChange={(e) => setDescriptionTe(e.target.value)} rows={3} className="form-control"></textarea>
+                                        </div>
 
-                        <div className="col-span-full">
-                            <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">Cover photo</label>
-                            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                <div className="text-center">
-                                    <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                        <label htmlFor="file-upload" className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                            <span>Upload a file</span>
-                                            <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleImageChange} multiple />
-                                        </label>
-                                        <p className="pl-1">or drag and drop</p>
+                                        <div className="col-12">
+                                            <label htmlFor="cover-photo" className="form-label">Cover photo</label>
+                                            <div className="mt-2 d-flex justify-content-center rounded border border-dashed border-secondary-subtle p-5">
+                                                <div className="text-center">
+                                                    <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                                                    <div className="mt-4 d-flex small text-muted">
+                                                        <label htmlFor="file-upload" className="btn btn-link">
+                                                            <span>Upload a file</span>
+                                                            <input id="file-upload" name="file-upload" type="file" className="visually-hidden" onChange={handleImageChange} multiple />
+                                                        </label>
+                                                        <p className="ms-1">or drag and drop</p>
+                                                    </div>
+                                                    <p className="small text-muted">PNG, JPG, GIF up to 10MB</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="border-b border-gray-900/10 pb-12">
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">Details</h2>
-                    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                        <div className="sm:col-span-2">
-                            <label htmlFor="area" className="block text-sm font-medium leading-6 text-gray-900">Area (sq yards)</label>
-                            <div className="mt-2">
-                                <input type="number" id="area" value={areaSqYards} onChange={(e) => setAreaSqYards(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                        </div>
+                            <div className="border-bottom pb-4 mb-4">
+                                <h4 className="h4 fw-semibold text-dark">Details</h4>
+                                <div className="row mt-4 g-3">
+                                    <div className="col-md-4">
+                                        <label htmlFor="area" className="form-label">Area (sq yards)</label>
+                                        <input type="number" id="area" value={areaSqYards} onChange={(e) => setAreaSqYards(e.target.value)} className="form-control" />
+                                    </div>
 
-                        <div className="sm:col-span-2">
-                            <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">Price</label>
-                            <div className="mt-2">
-                                <input type="number" id="price" value={price} onChange={(e) => setPrice(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                        </div>
+                                    <div className="col-md-4">
+                                        <label htmlFor="price" className="form-label">Price</label>
+                                        <input type="number" id="price" value={price} onChange={(e) => setPrice(e.target.value)} className="form-control" />
+                                    </div>
 
-                        <div className="sm:col-span-2">
-                            <label htmlFor="price-per-sq-yard" className="block text-sm font-medium leading-6 text-gray-900">Price per sq yard</label>
-                            <div className="mt-2">
-                                <input type="number" id="price-per-sq-yard" value={pricePerSqYard} onChange={(e) => setPricePerSqYard(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                        </div>
+                                    <div className="col-md-4">
+                                        <label htmlFor="price-per-sq-yard" className="form-label">Price per sq yard</label>
+                                        <input type="number" id="price-per-sq-yard" value={pricePerSqYard} onChange={(e) => setPricePerSqYard(e.target.value)} className="form-control" />
+                                    </div>
 
-                        <div className="col-span-full">
-                            <label htmlFor="google-maps" className="block text-sm font-medium leading-6 text-gray-900">Google Maps Embed</label>
-                            <div className="mt-2">
-                                <textarea id="google-maps" value={googleMapsEmbed} onChange={(e) => setGoogleMapsEmbed(e.target.value)} rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
-                            </div>
-                        </div>
+                                    <div className="col-12">
+                                        <label htmlFor="google-maps" className="form-label">Google Maps Embed</label>
+                                        <textarea id="google-maps" value={googleMapsEmbed} onChange={(e) => setGoogleMapsEmbed(e.target.value)} rows={3} className="form-control"></textarea>
+                                    </div>
 
-                        <div className="col-span-full">
-                            <label htmlFor="amenities" className="block text-sm font-medium leading-6 text-gray-900">Amenities (comma-separated)</label>
-                            <div className="mt-2">
-                                <input type="text" id="amenities" value={amenities} onChange={(e) => setAmenities(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                        </div>
+                                    <div className="col-12">
+                                        <label htmlFor="amenities" className="form-label">Amenities (comma-separated)</label>
+                                        <input type="text" id="amenities" value={amenities} onChange={(e) => setAmenities(e.target.value)} className="form-control" />
+                                    </div>
 
-                        <div className="col-span-full">
-                            <label htmlFor="investment-features" className="block text-sm font-medium leading-6 text-gray-900">Investment Features (comma-separated)</label>
-                            <div className="mt-2">
-                                <input type="text" id="investment-features" value={investmentFeatures} onChange={(e) => setInvestmentFeatures(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-                            </div>
-                        </div>
+                                    <div className="col-12">
+                                        <label htmlFor="investment-features" className="form-label">Investment Features (comma-separated)</label>
+                                        <input type="text" id="investment-features" value={investmentFeatures} onChange={(e) => setInvestmentFeatures(e.target.value)} className="form-control" />
+                                    </div>
 
-                        <div className="col-span-full">
-                            <label htmlFor="connectivity-info" className="block text-sm font-medium leading-6 text-gray-900">Connectivity Info (comma-separated)</label>
-                            <div className="mt-2">
-                                <input type="text" id="connectivity-info" value={connectivityInfo} onChange={(e) => setConnectivityInfo(e.target.value)} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                    <div className="col-12">
+                                        <label htmlFor="connectivity-info" className="form-label">Connectivity Info (comma-separated)</label>
+                                        <input type="text" id="connectivity-info" value={connectivityInfo} onChange={(e) => setConnectivityInfo(e.target.value)} className="form-control" />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+
+                            <div className="d-flex justify-content-end mt-4">
+                                <button type="button" className="btn btn-link text-dark fw-semibold me-2" onClick={() => navigate('/')}>Cancel</button>
+                                <button type="submit" disabled={uploading} className="btn btn-primary">
+                                    {uploading ? 'Uploading...' : 'Save'}
+                                </button>
+                            </div>
+                            {error && <div className="mt-3 text-danger">Error: {error}</div>}
+                        </form>
                     </div>
                 </div>
             </div>
-
-            <div className="mt-6 flex items-center justify-end gap-x-6">
-                <button type="button" className="text-sm font-semibold leading-6 text-gray-900" onClick={() => navigate('/')}>Cancel</button>
-                <button type="submit" disabled={uploading} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    {uploading ? 'Uploading...' : 'Save'}
-                </button>
-            </div>
-            {error && <div className="mt-4 text-red-500">Error: {error}</div>}
-        </form>
+        </div>
     );
 };
 

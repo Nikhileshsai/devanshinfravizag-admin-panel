@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import { PhotoIcon } from '@heroicons/react/24/solid';
 
 const PropertyEdit = () => {
     const { id } = useParams();
@@ -23,11 +23,7 @@ const PropertyEdit = () => {
     const [error, setError] = useState(null);
     const [uploading, setUploading] = useState(false);
 
-    useEffect(() => {
-        fetchProperty();
-    }, [id]);
-
-    const fetchProperty = async () => {
+    const fetchProperty = useCallback(async () => {
         const { data, error } = await supabase
             .from('properties')
             .select('*')
@@ -51,7 +47,11 @@ const PropertyEdit = () => {
             setConnectivityInfo(data.connectivity_info ? data.connectivity_info.join(', ') : '');
             setImageUrls(data.image_urls || []);
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        fetchProperty();
+    }, [fetchProperty]);
 
     const handleImageChange = (e) => {
         if (e.target.files) {
@@ -76,7 +76,7 @@ const PropertyEdit = () => {
         const newImageUrls = [...imageUrls];
         for (const image of images) {
             const fileName = `${Date.now()}_${image.name}`;
-            const { data, error } = await supabase.storage
+            const { error } = await supabase.storage
                 .from('property-images')
                 .upload(fileName, image);
 
@@ -96,7 +96,7 @@ const PropertyEdit = () => {
         const investmentFeaturesArray = investmentFeatures.split(',').map(item => item.trim());
         const connectivityInfoArray = connectivityInfo.split(',').map(item => item.trim());
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('properties')
             .update({
                 project_name: projectName,
@@ -175,7 +175,7 @@ const PropertyEdit = () => {
                                             <label htmlFor="cover-photo" className="form-label">Cover photo</label>
                                             <div className="mt-2 d-flex justify-content-center rounded border border-dashed border-secondary-subtle p-5">
                                                 <div className="text-center">
-                                                    {/* PhotoIcon removed, consider replacing with a Bootstrap icon or custom SVG */}
+                                                    <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
                                                     <div className="mt-4 d-flex small text-muted">
                                                         <label htmlFor="file-upload" className="btn btn-link">
                                                             <span>Upload a file</span>
