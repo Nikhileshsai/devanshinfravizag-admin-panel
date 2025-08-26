@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { Link } from 'react-router-dom';
+import PropertyForm from './PropertyForm';
 
 const PropertyList = () => {
     const [properties, setProperties] = useState([]);
     const [error, setError] = useState(null);
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         fetchProperties();
@@ -36,16 +38,22 @@ const PropertyList = () => {
         }
     };
 
+    const handlePropertyAdded = () => {
+        setShowForm(false);
+        fetchProperties();
+    };
+
     if (error) return <div className="text-danger">Error: {error}</div>;
 
     return (
         <div className="card p-4 shadow-sm rounded">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="h3 fw-bold text-dark">Properties</h2>
-                <Link to="/add" className="btn btn-primary">
-                    Add Property
-                </Link>
+                <button onClick={() => setShowForm(!showForm)} className="btn btn-primary">
+                    {showForm ? 'Cancel' : 'Add Property'}
+                </button>
             </div>
+            {showForm && <PropertyForm onPropertyAdded={handlePropertyAdded} />}
             <div className="table-responsive">
                 <table className="table">
                     <thead className="table-light text-muted text-uppercase small">
@@ -65,7 +73,7 @@ const PropertyList = () => {
                                 <td className="p-3 text-center">{property.price}</td>
                                 <td className="p-3 text-center">{property.area_sq_yards}</td>
                                 <td className="p-3 text-center">
-                                    <Link to={`/edit/${property.id}`} className="btn btn-success btn-sm me-2">Edit</Link>
+                                    <Link to={`/properties/edit/${property.id}`} className="btn btn-success btn-sm me-2">Edit</Link>
                                     <button onClick={() => deleteProperty(property.id)} className="btn btn-danger btn-sm">Delete</button>
                                 </td>
                             </tr>

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import { useNavigate } from 'react-router-dom';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 
-const PropertyForm = () => {
+const PropertyForm = ({ onPropertyAdded }) => {
     const [projectName, setProjectName] = useState('');
     const [projectNameTe, setProjectNameTe] = useState('');
     const [location, setLocation] = useState('');
@@ -19,7 +18,6 @@ const PropertyForm = () => {
     const [images, setImages] = useState([]);
     const [error, setError] = useState(null);
     const [uploading, setUploading] = useState(false);
-    const navigate = useNavigate();
 
     const handleImageChange = (e) => {
         if (e.target.files) {
@@ -73,7 +71,7 @@ const PropertyForm = () => {
         if (error) {
             setError(error.message);
         } else {
-            navigate('/');
+            onPropertyAdded();
         }
         setUploading(false);
     };
